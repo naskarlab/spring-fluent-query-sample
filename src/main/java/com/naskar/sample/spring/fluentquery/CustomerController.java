@@ -57,6 +57,7 @@ public class CustomerController {
 		
 		if (customerFound != null) {
 			customerFound.setName(customer.getName());
+			customerFound.setRegionCode(customer.getRegionCode());
 			repository.getEntityManager().merge(customerFound);
 		}
 		
