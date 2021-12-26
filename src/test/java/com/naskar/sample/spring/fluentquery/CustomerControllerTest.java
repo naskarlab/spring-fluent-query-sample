@@ -11,6 +11,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 import javax.persistence.EntityManager;
 
@@ -59,7 +60,7 @@ class CustomerControllerTest {
 		entityManager.flush();
 		
 		mvc.perform(get("/customers/" + customer.getId()))
-				.andExpect(jsonPath("$.name", is("Fulano")));
+				.andExpect(jsonPath("$.name", is(customer.getName())));
 		
 	}
 	
@@ -71,7 +72,7 @@ class CustomerControllerTest {
 		mvc.perform(post("/customers")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(toJson(customer)))
-				.andExpect(jsonPath("$.name", is("Ciclano")));
+				.andExpect(jsonPath("$.name", is(customer.getName())));
 		
 	}
 	
@@ -110,6 +111,27 @@ class CustomerControllerTest {
 		
 		mvc.perform(get("/customers/" + customer.getId()))
 			.andExpect(content().string(""));
+		
+	}
+	
+	@Test
+	@Transactional
+	public void successFindByRegionCode() throws Exception {
+		
+		var customerBr = new Customer();
+		customerBr.setName("Beltrano BR");
+		customerBr.setRegionCode("BR");
+		entityManager.persist(customerBr);
+		
+		var customerUs = new Customer();
+		customerUs.setName("Beltrano US");
+		customerUs.setRegionCode("US");
+		entityManager.persist(customerUs);
+		
+		entityManager.flush();
+		
+		mvc.perform(get("/customers/region/" + customerBr.getRegionCode()))
+				.andExpect(jsonPath("$[*].name", is(Arrays.asList(customerBr.getName()))));
 		
 	}
 	

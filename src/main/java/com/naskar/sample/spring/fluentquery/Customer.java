@@ -18,6 +18,9 @@ public class Customer {
 	@Column(name = "NM_NAME")
 	private String name;
 
+	@Column(name = "CD_REGION")
+	private String regionCode;
+
 	public Long getId() {
 		return id;
 	}
@@ -33,5 +36,13 @@ public class Customer {
 	public void setName(String name) {
 		this.name = name;
 	}
-	
+
+	public String getRegionCode() {
+		return regionCode;
+	}
+
+	public void setRegionCode(String regionCode) {
+		this.regionCode = regionCode;
+	}
+
 }

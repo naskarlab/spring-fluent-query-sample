@@ -34,6 +34,14 @@ public class CustomerController {
 		);
 	}
 	
+	@GetMapping("/customers/region/{code}")
+	public List<Customer> findByRegionCode(@PathVariable("code") String regionCode) {
+		return repository.list(
+				repository.query(Customer.class)
+					.where(x -> x.getRegionCode()).eq(regionCode)
+		);
+	}
+	
 	@PostMapping("/customers")
 	public Customer add(@RequestBody Customer customer) {
 		repository.getEntityManager().persist(customer);
